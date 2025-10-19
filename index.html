@@ -1,118 +1,30 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Chúc mừng 20/10</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #ffebee;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            font-family: 'Arial', sans-serif;
-        }
-        
-        .firework-heart {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin-bottom: 120px;
-        }
-        
-        .spark {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: #ff0000;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #ff0000;
-            animation: sparkle 2s infinite;
-        }
-        
-        .text-ring {
-            position: relative;
-            width: 350px;
-            height: 350px;
-            animation: rotate 20s linear infinite;
-        }
-        
-        .message {
-            position: absolute;
-            font-size: 16px;
-            font-weight: bold;
-            color: #c2185b;
-            white-space: nowrap;
-            transform-origin: 0 175px;
-            left: 50%;
-            top: 0;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-        
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-        
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
-</head>
-<body>
-    <div class="firework-heart" id="heart"></div>
-    <div class="text-ring" id="textRing"></div>
+<html lang="en">
 
-    <script>
-        // Tạo trái tim từ hạt pháo hoa
-        function createFireworkHeart() {
-            const container = document.getElementById('heart');
-            const heartPoints = [];
-            
-            // Tạo hình trái tim
-            for (let t = 0; t < 2 * Math.PI; t += 0.02) {
-                const scale = 15;
-                const x = scale * 16 * Math.pow(Math.sin(t), 3);
-                const y = -scale * (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-                heartPoints.push({x: x + 75, y: y + 75});
-            }
-            
-            // Tạo các hạt
-            heartPoints.forEach((point, index) => {
-                const spark = document.createElement('div');
-                spark.className = 'spark';
-                spark.style.left = point.x + 'px';
-                spark.style.top = point.y + 'px';
-                spark.style.animationDelay = (index * 0.02) + 's';
-                container.appendChild(spark);
-            });
-        }
-        
-        // Tạo vòng chữ
-        function createTextRing() {
-            const ring = document.getElementById('textRing');
-            const messages = [
-                "Chúc mừng ngày Phụ nữ Việt Nam 20/10",
-                "Chúc em luôn xinh đẹp và hạnh phúc",
-                "Chúc chị ngày 20/10 thật vui vẻ",
-                "Chúc mẹ yêu luôn mạnh khỏe"
-            ];
-            
-            messages.forEach((msg, index) => {
-                const message = document.createElement('div');
-                message.className = 'message';
-                message.textContent = msg;
-                message.style.transform = `rotate(${index * 90}deg)`;
-                ring.appendChild(message);
-            });
-        }
-        
-        createFireworkHeart();
-        createTextRing();
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lovely – nơi chia sẻ yêu thương." />
+  <!-- <meta name="robots" content="index, follow"> -->
+  <title>Heart</title>
+  <link rel="icon" href="https://github.com/Panbap/anh/blob/main/icon1.png?raw=true" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Mali:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js",
+        "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/"
+      }
+    }
     </script>
+  <script src="./assets/index.main.js?v=202406"></script>
+  </script>
 </body>
+
 </html>
