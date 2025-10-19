@@ -6,98 +6,97 @@
         body {
             margin: 0;
             padding: 0;
-            background: #ffe6e6;
+            background: linear-gradient(45deg, #ffb6c1, #ff69b4, #ff1493);
             height: 100vh;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            font-family: Arial, sans-serif;
         }
         
-        .heart-fireworks {
+        .heart-container {
             position: relative;
-            width: 200px;
-            height: 200px;
+            width: 120px;
+            height: 120px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            margin-bottom: 100px;
         }
         
-        .heart-particle {
+        .particle {
             position: absolute;
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: #ff0000;
             border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px #ff0000;
         }
         
-        .text-circle {
-            margin-top: 100px;
+        .text-ring {
             position: relative;
-            width: 400px;
-            height: 400px;
-            animation: rotateCircle 20s linear infinite;
+            width: 300px;
+            height: 300px;
+            animation: rotate 15s linear infinite;
         }
         
         .text-item {
             position: absolute;
             font-size: 18px;
             font-weight: bold;
-            color: #cc0000;
+            color: #8b0000;
+            text-shadow: 1px 1px 2px white;
             white-space: nowrap;
-            transform-origin: 0 200px;
+            transform-origin: 0 150px;
             left: 50%;
             top: 0;
         }
         
-        @keyframes rotateCircle {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
         
-        @keyframes heartPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="heart-fireworks" id="heartContainer"></div>
-    <div class="text-circle" id="textCircle"></div>
+    <div class="heart-container" id="heart"></div>
+    <div class="text-ring" id="textRing"></div>
 
     <script>
-        // Tạo trái tim bằng các hạt pháo hoa
-        function createHeartParticles() {
-            const container = document.getElementById('heartContainer');
-            const particles = [];
-            const heartPoints = [];
+        // Tạo trái tim từ các hạt pháo hoa
+        function createHeart() {
+            const container = document.getElementById('heart');
+            const points = [];
             
-            // Tạo các điểm hình trái tim
-            for (let t = 0; t < 2 * Math.PI; t += 0.1) {
+            // Công thức trái tim
+            for (let t = 0; t < 2 * Math.PI; t += 0.05) {
                 const x = 16 * Math.pow(Math.sin(t), 3);
                 const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
-                heartPoints.push({x: x * 4, y: -y * 4});
+                points.push({x: x * 3, y: -y * 3});
             }
             
-            // Tạo các hạt tại các điểm trái tim
-            heartPoints.forEach(point => {
+            points.forEach(point => {
                 const particle = document.createElement('div');
-                particle.className = 'heart-particle';
-                particle.style.left = (100 + point.x) + 'px';
-                particle.style.top = (100 + point.y) + 'px';
-                particle.style.animation = `heartPulse ${1 + Math.random()}s infinite`;
+                particle.className = 'particle';
+                particle.style.left = (60 + point.x) + 'px';
+                particle.style.top = (60 + point.y) + 'px';
+                particle.style.animationDelay = Math.random() + 's';
                 container.appendChild(particle);
             });
         }
         
         // Tạo vòng chữ xoay
-        function createTextCircle() {
-            const circle = document.getElementById('textCircle');
+        function createTextRing() {
+            const ring = document.getElementById('textRing');
             const texts = [
                 "Chúc mừng ngày Phụ nữ Việt Nam 20/10",
-                "Chúc em luôn xinh đẹp và hạnh phúc", 
-                "Chúc chị ngày 20/10 thật vui vẻ",
+                "Chúc em luôn xinh đẹp và hạnh phúc",
+                "Chúc chị ngày 20/10 thật vui vẻ", 
                 "Chúc mẹ yêu luôn mạnh khỏe"
             ];
             
@@ -106,12 +105,12 @@
                 textElement.className = 'text-item';
                 textElement.textContent = text;
                 textElement.style.transform = `rotate(${index * 90}deg)`;
-                circle.appendChild(textElement);
+                ring.appendChild(textElement);
             });
         }
         
-        createHeartParticles();
-        createTextCircle();
+        createHeart();
+        createTextRing();
     </script>
 </body>
 </html>
