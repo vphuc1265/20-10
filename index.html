@@ -6,55 +6,55 @@
         body {
             margin: 0;
             padding: 0;
-            background: linear-gradient(45deg, #ffb6c1, #ff69b4, #ff1493);
+            background: #ffebee;
             height: 100vh;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
         
-        .heart-container {
+        .firework-heart {
             position: relative;
-            width: 120px;
-            height: 120px;
-            animation: heartbeat 1.5s ease-in-out infinite;
-            margin-bottom: 100px;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 120px;
         }
         
-        .particle {
+        .spark {
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: #ff0000;
             border-radius: 50%;
-            box-shadow: 0 0 10px #ff0000;
+            box-shadow: 0 0 8px #ff0000;
+            animation: sparkle 2s infinite;
         }
         
         .text-ring {
             position: relative;
-            width: 300px;
-            height: 300px;
-            animation: rotate 15s linear infinite;
+            width: 350px;
+            height: 350px;
+            animation: rotate 20s linear infinite;
         }
         
-        .text-item {
+        .message {
             position: absolute;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            color: #8b0000;
-            text-shadow: 1px 1px 2px white;
+            color: #c2185b;
             white-space: nowrap;
-            transform-origin: 0 150px;
+            transform-origin: 0 175px;
             left: 50%;
             top: 0;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
         }
         
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
         }
         
         @keyframes rotate {
@@ -64,52 +64,54 @@
     </style>
 </head>
 <body>
-    <div class="heart-container" id="heart"></div>
+    <div class="firework-heart" id="heart"></div>
     <div class="text-ring" id="textRing"></div>
 
     <script>
-        // Tạo trái tim từ các hạt pháo hoa
-        function createHeart() {
+        // Tạo trái tim từ hạt pháo hoa
+        function createFireworkHeart() {
             const container = document.getElementById('heart');
-            const points = [];
+            const heartPoints = [];
             
-            // Công thức trái tim
-            for (let t = 0; t < 2 * Math.PI; t += 0.05) {
-                const x = 16 * Math.pow(Math.sin(t), 3);
-                const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
-                points.push({x: x * 3, y: -y * 3});
+            // Tạo hình trái tim
+            for (let t = 0; t < 2 * Math.PI; t += 0.02) {
+                const scale = 15;
+                const x = scale * 16 * Math.pow(Math.sin(t), 3);
+                const y = -scale * (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                heartPoints.push({x: x + 75, y: y + 75});
             }
             
-            points.forEach(point => {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = (60 + point.x) + 'px';
-                particle.style.top = (60 + point.y) + 'px';
-                particle.style.animationDelay = Math.random() + 's';
-                container.appendChild(particle);
+            // Tạo các hạt
+            heartPoints.forEach((point, index) => {
+                const spark = document.createElement('div');
+                spark.className = 'spark';
+                spark.style.left = point.x + 'px';
+                spark.style.top = point.y + 'px';
+                spark.style.animationDelay = (index * 0.02) + 's';
+                container.appendChild(spark);
             });
         }
         
-        // Tạo vòng chữ xoay
+        // Tạo vòng chữ
         function createTextRing() {
             const ring = document.getElementById('textRing');
-            const texts = [
+            const messages = [
                 "Chúc mừng ngày Phụ nữ Việt Nam 20/10",
                 "Chúc em luôn xinh đẹp và hạnh phúc",
-                "Chúc chị ngày 20/10 thật vui vẻ", 
+                "Chúc chị ngày 20/10 thật vui vẻ",
                 "Chúc mẹ yêu luôn mạnh khỏe"
             ];
             
-            texts.forEach((text, index) => {
-                const textElement = document.createElement('div');
-                textElement.className = 'text-item';
-                textElement.textContent = text;
-                textElement.style.transform = `rotate(${index * 90}deg)`;
-                ring.appendChild(textElement);
+            messages.forEach((msg, index) => {
+                const message = document.createElement('div');
+                message.className = 'message';
+                message.textContent = msg;
+                message.style.transform = `rotate(${index * 90}deg)`;
+                ring.appendChild(message);
             });
         }
         
-        createHeart();
+        createFireworkHeart();
         createTextRing();
     </script>
 </body>
