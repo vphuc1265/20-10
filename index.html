@@ -1,30 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Lovely – nơi chia sẻ yêu thương." />
-  <!-- <meta name="robots" content="index, follow"> -->
-  <title>Heart</title>
-  <link rel="icon" href="https://github.com/Panbap/anh/blob/main/icon1.png?raw=true" type="image/png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Mali:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
-    rel="stylesheet">
-</head>
-
-<body>
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js",
-        "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/"
-      }
+  <title>Trái Tim 20/10</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffe6e6;
+      overflow: hidden;
     }
-    </script>
-  <script src="./assets/index.main.js?v=202406"></script>
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="heartCanvas"></canvas>
+  
+  <script type="module">
+    import * as THREE from 'three';
+    
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('heartCanvas') });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0xffe6e6);
+    
+    // Tạo trái tim từ các particle
+    const heartGeometry = new THREE.BufferGeometry();
+    const particles = [];
+    const positions = [];
+    
+    for (let t = 0; t < 2 * Math.PI; t += 0.01) {
+      const x = 16 * Math.pow(Math.sin(t), 3);
+      const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+      const z = 0;
+      
+      positions.push(x * 0.1, y * 0.1, z);
+    }
+    
+    heartGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    
+    const heartMaterial = new THREE.PointsMaterial({
+      color: 0xff0000,
+      size: 0.05,
+      sizeAttenuation: true
+    });
+    
+    const heart = new THREE.Points(heartGeometry, heartMaterial);
+    scene.add(heart);
+    
+    camera.position.z = 2;
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      heart.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    
+    animate();
   </script>
 </body>
-
 </html>
