@@ -3,117 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Trái Tim 20/10</title>
+    <title>20/10</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            background: #ffe6e6;
-            overflow: hidden;
-            font-family: Arial;
-            width: 100vw;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body {
+            background: #ffebee;
+            font-family: Arial, sans-serif;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
             position: fixed;
-            top: 0;
-            left: 0;
-        }
-        #canvas-container {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
         }
-        .messages {
+        
+        .heart-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+        }
+        
+        .heart {
             position: absolute;
-            bottom: 30px;
-            width: 100%;
-            text-align: center;
-            color: #cc0000;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 100;
+            width: 100px;
+            height: 90px;
+            animation: heartbeat 1.5s ease-in-out infinite;
         }
+        
+        .heart:before,
+        .heart:after {
+            content: '';
+            position: absolute;
+            left: 50px;
+            top: 0;
+            width: 50px;
+            height: 80px;
+            background: #ff0000;
+            border-radius: 50px 50px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+            box-shadow: 0 0 20px rgba(255,0,0,0.6);
+        }
+        
+        .heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+        
+        .spark {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ff0000;
+            border-radius: 50%;
+            animation: sparkle 2s linear infinite;
+            opacity: 0;
+        }
+        
         .message {
-            margin: 5px 0;
-            text-shadow: 1px 1px 2px white;
+            font-size: 16px;
+            color: #c2185b;
+            margin: 8px 0;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes sparkle {
+            0% {
+                transform: translate(0,0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="canvas-container"></div>
-    <div class="messages">
-        <div class="message">Chúc mừng ngày Phụ nữ Việt Nam 20/10</div>
-        <div class="message">Chúc em luôn xinh đẹp và hạnh phúc</div>
-        <div class="message">Chúc chị ngày 20/10 thật vui vẻ</div>
-        <div class="message">Chúc mẹ yêu luôn mạnh khỏe</div>
+    <div class="heart-container">
+        <div class="heart"></div>
+        <div id="sparks-container"></div>
     </div>
+    <div class="message">Chúc mừng ngày Phụ nữ Việt Nam 20/10</div>
+    <div class="message">Chúc em luôn xinh đẹp và hạnh phúc</div>
+    <div class="message">Chúc chị ngày 20/10 thật vui vẻ</div>
+    <div class="message">Chúc mẹ yêu luôn mạnh khỏe</div>
 
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js"
-        }
-    }
-    </script>
-
-    <script type="module">
-        import * as THREE from 'three';
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0xffe6e6);
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-        // Tạo trái tim từ các particle - NHỎ HƠN 50%
-        const heartGeometry = new THREE.BufferGeometry();
-        const positions = [];
-        const colors = [];
-
-        for (let t = 0; t < 2 * Math.PI; t += 0.02) {
-            const x = 16 * Math.pow(Math.sin(t), 3);
-            const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
-            const z = (Math.random() - 0.5) * 0.3; // Giảm độ sâu
+    <script>
+        // Tạo hiệu ứng tia lửa
+        function createSparks() {
+            const container = document.getElementById('sparks-container');
             
-            // Giảm kích thước 50%
-            positions.push(x * 0.04, y * 0.04, z);
-            colors.push(1, 0, 0);
+            for (let i = 0; i < 20; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'spark';
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 60 + Math.random() * 40;
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+                
+                spark.style.setProperty('--x', x + 'px');
+                spark.style.setProperty('--y', y + 'px');
+                spark.style.animationDelay = Math.random() * 2 + 's';
+                spark.style.left = '50px';
+                spark.style.top = '45px';
+                
+                container.appendChild(spark);
+            }
         }
-
-        heartGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        heartGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-
-        const heartMaterial = new THREE.PointsMaterial({
-            size: 0.015, // Giảm kích thước particle
-            vertexColors: true,
-            sizeAttenuation: true
-        });
-
-        const heart = new THREE.Points(heartGeometry, heartMaterial);
-        scene.add(heart);
-
-        camera.position.z = 1.2; // Điều chỉnh camera cho vừa
-
-        function animate() {
-            requestAnimationFrame(animate);
-            heart.rotation.y += 0.01;
-            heart.rotation.x += 0.005;
-            renderer.render(scene, camera);
-        }
-
-        animate();
-
+        
+        createSparks();
+        
         // Chặn zoom
-        document.addEventListener('wheel', function(e) {
-            if (e.ctrlKey) e.preventDefault();
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) e.preventDefault();
         }, { passive: false });
-
+        
         document.addEventListener('gesturestart', function(e) {
             e.preventDefault();
         });
+        
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) e.preventDefault();
+        }, { passive: false });
     </script>
 </body>
 </html>
